@@ -152,18 +152,18 @@ func (m *Metadata) RegisterChunkServer(address string, chunks []string) {
 }
 
 // GetAvailableChunkServers returns the list of available chunk servers whose heartbeats had been updated recently within 30 secs
-func (m *Metadata) GetAvailableChunkServers(count int) []string {
+func (m *Metadata) GetAvailableChunkServers(replicationFactor int) []string {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	servers := make([]string, 0, count)
+	servers := make([]string, 0, replicationFactor)
 	now := time.Now()
 
 	for address, server := range m.chunkServers {
 		// only considers servers available if the heartbeat was updated within last 30 seconds
 		if now.Sub(server.LatestHeartbeat) < 30*time.Second {
 			servers = append(servers, address)
-			if len(servers) >= count {
+			if len(servers) >= replicationFactor {
 				break
 			}
 		}
