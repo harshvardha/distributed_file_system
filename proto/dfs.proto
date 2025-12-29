@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package dfs;
+
+option go_package = "/proto";
+
+// Master Service: handles file metadata and chunk location
+service Master {
+    // UploadFile: returns chunk handles and chunk server locations
+    rpc UploadFile(UploadFileRequest) returns (UploadFileResponse);
+
+    // DownloadFile: returns file metadata and chunk locations for download
+    rpc DownloadFile(DownloadFileRequest) returns (DownloadFileResponse);
+
+    // ListFiles: lists all the files in the system
+    rpc ListFiles(ListFilesRequest) returns (ListFilesResponse);
+
+    // Heartbeat: checks whether the chunk server is alive or not using heartbeats
+    rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+
+    // ReportChunk: reports chunk storage completion
+    rpc ReportChunk(ReportChunkRequest) returns (ReportChunkResponse);
+}
+
+// ChunkServer Service: handles chunk read/write operations
+service ChunkServer {
+    // WriteChunk: writes a chunk to the provided server
+    rpc WriteChunk(WriteChunkRequest) returns (WriteChunkResponse);
+
+    // ReadChunk: reads a chunk from the provided server
+    rpc ReadChunk(ReadChunkRequest) returns (ReadChunkResponse);
+}
+
+// Messages for Master Service
+message UploadFileRequest {
+    string filename = 1;
+    int64 filesize = 2;
+}
+
+message ChunkLocation {
+    string chunk_handle = 1;
+    repeated string chunk_server_addresses = 2;
+    int32 chunk_index = 3;
+}
+
+message UploadFileResponse {
+    repeated ChunkLocation chunk_locations = 1;
+}
+
+message DownloadFileRequest {
+    string filename = 1;
+}
+
+message DownloadFileResponse {
+    int64 filesize = 1;
+    repeated ChunkLocation chunk_location = 2;
+}
+
+message ListFilesRequest {}
+
+message FileInfo {
+    string filename = 1;
+    int64 filesize = 2;
+    int32 num_chunks = 3;
+}
+
+message ListFilesResponse {
+    repeated FileInfo files = 1;
+}
+
+message HeartbeatRequest {
+    string chunk_server_address = 1;
+    repeated string chunk_handles = 2;
+}
+
+message HeartbeatResponse {
+    bool success = 1;
+}
+
+message ReportChunkRequest {
+    string chunk_handle = 1;
+    string chunk_server_address = 2;
+}
+
+message ReportChunkResponse {
+    bool success = 1;
+}
+
+// Messages for ChunkServer Service
+message WriteChunkRequest {
+    string chunk_handle = 1;
+    bytes data = 2;
+    int32 chunk_index = 3;
+}
+
+message WriteChunkResponse {
+    bool success = 1;
+}
+
+message ReadChunkRequest {
+    string chunk_handle = 1;
+}
+
+message ReadChunkResponse {
+    bytes data = 1;
+}
