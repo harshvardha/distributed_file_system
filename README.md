@@ -97,3 +97,8 @@ go run cmd/client/main.go download -name myfile.txt -output /path/to/output.txt
 - Optimized append operations
 - Garbage collection for deleted files
 - Chunk migration and load balancing
+
+## Related Documentation
+
+- [Master Server](./master-server-explained.md)
+- [Chunk Server](./chunk-server-explained.md)
