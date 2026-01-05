@@ -94,7 +94,7 @@ func (s *Storage) HasChunk(chunkHandle string) bool {
 // ListChunks retuns all chunk handles
 func (s *Storage) ListChunks() []string {
 	s.mu.RLock()
-	defer s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	chunks := make([]string, 0, len(s.chunks))
 	for chunkHandle := range s.chunks {
