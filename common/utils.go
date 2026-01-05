@@ -7,7 +7,7 @@ import (
 
 const (
 	// ChunkSize is the size of each chunk in bytes (64MB)
-	ChunkSize = 128 * 1024 * 1024
+	ChunkSize = 64 * 1024 * 1024
 
 	// ReplicationFactor is the number of replicas for each chunk
 	ReplicationFactor = 3
