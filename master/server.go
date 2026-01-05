@@ -39,7 +39,7 @@ func (s *Server) UploadFile(ctx context.Context, req *pb.UploadFileRequest) (*pb
 	// Allocating chunks and assigning chunk servers
 	chunkLocations := make([]*pb.ChunkLocation, 0, numChunks)
 
-	for i := range numChunks {
+	for i := 0; i < numChunks; i++ {
 		// Generating chunk handle for each chunk
 		chunkHandle := common.GenerateChunkHandle(req.Filename, i)
 
@@ -147,7 +147,7 @@ func (s *Server) ReportChunk(ctx context.Context, req *pb.ReportChunkRequest) (*
 
 // Start starts the master server
 func (s *Server) Start() error {
-	listen, err := net.Listen("tcp", common.MasterAddress)
+	listen, err := net.Listen("tcp", s.address)
 	if err != nil {
 		return fmt.Errorf("failed to listen: %v", err)
 	}
