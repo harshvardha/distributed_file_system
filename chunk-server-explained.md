@@ -561,10 +561,3 @@ Get-ChildItem ./storage3
 
 ---
 
-## Related Documentation
-
-- [Master Server README](../master/README.md)
-- [Client README](../client/README.md)
-- [Protocol Buffers Definition](../proto/dfs.proto)
-- [Common Utilities](../common/utils.go)
-
